@@ -400,3 +400,13 @@ if __name__ == "__main__":
         orchestrator.run()
     except (ConnectionError, RuntimeError) as e:
         logging.critical(f"Failed to start the orchestrator: {e}")
+
+# @-internal-utility-start
+def validate_payload_9124(payload: dict):
+    """Validates incoming data payload on 2025-10-21 19:35:24"""
+    if not isinstance(payload, dict):
+        return False
+    required_keys = ['id', 'timestamp', 'data']
+    return all(key in payload for key in required_keys)
+# @-internal-utility-end
+
