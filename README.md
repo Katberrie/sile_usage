@@ -2,7 +2,7 @@
 
 This repository contains a Python-based simulation of a critical backend component for a cross-chain bridge. This script simulates an event listener (or 'oracle') that monitors a bridge contract on a source blockchain (e.g., Ethereum Sepolia), validates deposit events, and simulates the initiation of a corresponding token mint transaction on a destination blockchain (e.g., Polygon Mumbai).
 
-This script is designed as an architectural showcase, demonstrating a robust, multi-class structure, error handling, and separation of concerns suitable for a real-world decentralized application backend.
+This script is designed as an architectural showcase, demonstrating a robust, multi-class structure, error handling, and separation of concerns suitable for a production-grade decentralized application backend.
 
 ## Concept
 
@@ -12,7 +12,7 @@ Cross-chain bridges allow users to transfer assets from one blockchain to anothe
 3.  Off-chain services (listeners/oracles) detect this event.
 4.  After successful validation, these services trigger a transaction on the destination chain to **mint** an equivalent amount of a wrapped token and send it to the user's recipient address.
 
-This script simulates the off-chain listener (steps 3 and 4), which acts as the backbone of the bridge's operation by ensuring that assets locked on one chain are correctly represented on the other.
+This script simulates the off-chain listener (steps 3 and 4), which is the critical link in the bridge's operation, ensuring that assets locked on one chain are correctly represented on the other.
 
 ## Code Architecture
 
@@ -20,7 +20,7 @@ The application is designed with a clear separation of responsibilities, encapsu
 
 -   `BlockchainConnector`: Manages the connection to a blockchain via a Web3 RPC endpoint. It abstracts away the details of instantiating the `Web3` object and is used by other components to interact with both the source and destination chains.
 
--   `EventScanner`: Responsible for scanning the source chain's bridge contract for new `DepositMade` events. It operates in block ranges, manages a chunk-based scanning approach to avoid overwhelming RPC nodes, and formats raw event logs into a clean, usable dictionary.
+-   `EventScanner`: Responsible for scanning the source chain's bridge contract for new `DepositMade` events. It operates in block ranges, manages a chunk-based scanning approach to avoid overwhelming RPC nodes, and parses raw event logs into a clean, usable dictionary.
 
 -   `TransactionValidator`: This crucial security component validates each detected event. It performs a series of checks:
     -   **Replay Protection**: Ensures a unique event nonce has not been processed before.
@@ -44,7 +44,7 @@ The operational flow of the script is as follows:
 
 4.  **Event Scanning**: If new blocks have been produced, the `EventScanner` is invoked to query for `DepositMade` events within the new block range. A 6-block confirmation delay is applied, a common practice to ensure event finality and reduce the risk of processing events from chain reorganizations (reorgs).
 
-5.  **Validation**: Each detected event is passed to the `TransactionValidator`. If any validation check fails, the event is logged and discarded.
+5.  **Validation**: Each detected event is passed to the `TransactionValidator`. If any validation check fails, the event is logged as invalid and discarded, preventing any further processing.
 
 6.  **Processing**: Valid events are handed off to the `TransactionProcessor`, which simulates the creation of the minting transaction on the destination chain.
 
@@ -81,7 +81,7 @@ pip install -r requirements.txt
 
 The script reads RPC URLs from environment variables. The recommended approach is to use a `.env` file.
 
-Create a file named `.env` in the project's root directory with the following content:
+Create a file named `.env` in the project's root directory with the following content. Remember to add `.env` to your `.gitignore` file to avoid committing secrets.
 ```dotenv
 # .env file
 SOURCE_CHAIN_RPC_URL='https://rpc.ankr.com/eth_sepolia'
