@@ -1,6 +1,6 @@
 # {repo_name}: Cross-Chain Bridge Event Listener Simulation
 
-This repository contains a Python-based simulation of a critical backend component for a cross-chain bridge. This script simulates an event listener (or 'oracle') that monitors a bridge contract on a source blockchain (e.g., Ethereum Sepolia), validates deposit events, and simulates initiating a corresponding token mint transaction on a destination blockchain (e.g., Polygon Mumbai).
+This repository contains a Python-based simulation of a critical backend component for a cross-chain bridge. This script simulates an event listener (or 'oracle') that monitors a bridge contract on a source blockchain (e.g., Ethereum Sepolia), validates deposit events, and simulates the initiation of a corresponding token mint transaction on a destination blockchain (e.g., Polygon Mumbai).
 
 This script is designed as an architectural showcase, demonstrating a robust, multi-class structure, error handling, and separation of concerns suitable for a real-world decentralized application backend.
 
@@ -30,7 +30,7 @@ The application is designed with a clear separation of responsibilities, encapsu
 
 -   `TransactionProcessor`: If an event passes validation, this class takes over. It is responsible for constructing and (in this simulation) logging the details of the corresponding `mintTokens` transaction that would be sent to the destination chain's bridge contract.
 
--   `BridgeOrchestrator`: The central controller that integrates all the other components. It contains the main application loop, manages state (such as the last scanned block and the set of processed nonces), and orchestrates the flow of data from scanning to validation to processing. It also includes top-level error handling and resilience logic.
+-   `BridgeOrchestrator`: The central controller that integrates all other components. It contains the main application loop, manages state (such as the last scanned block and the set of processed nonces), and orchestrates the flow of data from scanning to validation to processing. It also includes top-level error handling and resilience logic.
 
 ## How it Works
 
@@ -108,7 +108,7 @@ from config import SOURCE_CHAIN_RPC_URL, DESTINATION_CHAIN_RPC_URL
 def main():
     """Initializes and runs the bridge orchestrator."""
     print("Starting the Cross-Chain Bridge Event Listener Simulation.")
-    print("This script will poll for 'DepositMade' events on the source chain...")
+    print("This script will poll for `DepositMade` events on the source chain...")
     print("Press Ctrl+C to stop.")
 
     try:
@@ -136,16 +136,16 @@ The application will start and begin polling for events. The output will look si
 
 ```
 Starting the Cross-Chain Bridge Event Listener Simulation.
-This script will poll for 'DepositMade' events on the source chain...
+This script will poll for `DepositMade` events on the source chain...
 Press Ctrl+C to stop.
 2023-10-27 10:30:00,123 - BridgeOrchestrator - INFO - Bridge Orchestrator started. Initial scan block: 4750100
-2023-10-27 10:30:35,456 - EventScanner - INFO - Scanning for 'DepositMade' events from block 4750101 to 4750105.
+2023-10-27 10:30:35,456 - EventScanner - INFO - Scanning for `DepositMade` events from block 4750101 to 4750105.
 2023-10-27 10:30:37,789 - BridgeOrchestrator - INFO - Scan complete. Last scanned block is now 4750105
 ... (if an event is found) ...
 2023-10-27 10:31:10,112 - EventScanner - INFO - Found 1 events in blocks 4750106-4750110.
 2023-10-27 10:31:10,115 - TransactionValidator - INFO - Successfully validated event from tx 0x... with nonce 12345.
 2023-10-27 10:31:10,118 - TransactionProcessor - INFO - Processing mint for recipient 0x... with amount 500000000000000000 (from source tx 0x...).
-2023-10-27 10:31:10,120 - TransactionProcessor - INFO - [SIMULATION] Would call 'mintTokens' on 0x5B6a9B55B6C8f7B2bEa7bF1f937B8b9933B02b54 for nonce 12345.
+2023-10-27 10:31:10,120 - TransactionProcessor - INFO - [SIMULATION] Would call `mintTokens` on 0x5B6a9B55B6C8f7B2bEa7bF1f937B8b9933B02b54 for nonce 12345.
 2023-10-27 10:31:10,121 - TransactionProcessor - INFO - [SIMULATION] Transaction details: to=0x..., amount=500000000000000000
 2023-10-27 10:31:10,122 - BridgeOrchestrator - INFO - Successfully processed event with nonce 12345
 ```
