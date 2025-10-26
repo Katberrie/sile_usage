@@ -12,7 +12,7 @@ Cross-chain bridges allow users to transfer assets from one blockchain to anothe
 3.  Off-chain services (listeners/oracles) detect this event.
 4.  After validating the event, these services trigger a transaction on the destination chain to **mint** an equivalent amount of a wrapped token and send it to the user's recipient address.
 
-This script simulates the off-chain listener (step 3 and 4), which is the backbone of the bridge's operation, ensuring that locked assets on one chain are correctly represented on the other.
+This script simulates the off-chain listener (steps 3 and 4), which acts as the backbone of the bridge's operation by ensuring that assets locked on one chain are correctly represented on the other.
 
 ## Code Architecture
 
@@ -52,7 +52,7 @@ The operational flow of the script is as follows:
 
 8.  **Wait**: The loop then sleeps for a configured interval (`POLLING_INTERVAL_SECONDS`) before repeating the process.
 
-## Usage Example
+## Usage
 
 ### 1. Prerequisites
 - Python 3.8+
@@ -79,14 +79,22 @@ pip install -r requirements.txt
 
 ### 3. Configuration
 
-The script reads RPC URLs from environment variables. Export them in your terminal session:
+The script reads RPC URLs from environment variables. The recommended approach is to use a `.env` file.
 
+Create a file named `.env` in the project's root directory:
+```dotenv
+# .env file
+SOURCE_CHAIN_RPC_URL='https://rpc.ankr.com/eth_sepolia'
+DESTINATION_CHAIN_RPC_URL='https://rpc.ankr.com/polygon_mumbai'
+```
+
+Alternatively, you can export the variables directly in your terminal session:
 ```bash
 export SOURCE_CHAIN_RPC_URL='https://rpc.ankr.com/eth_sepolia'
 export DESTINATION_CHAIN_RPC_URL='https://rpc.ankr.com/polygon_mumbai'
 ```
 
-_Note: The script has default public RPC URLs, but using your own is highly recommended for stability._
+_Note: While the script may have default public RPC URLs as fallbacks, using your own is highly recommended for stability and performance._
 
 ### 4. Running the Script
 
