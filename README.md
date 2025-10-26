@@ -1,6 +1,6 @@
 # {repo_name}: Cross-Chain Bridge Event Listener Simulation
 
-This repository contains a Python-based simulation of a critical backend component for a cross-chain bridge. It acts as an event listener, or oracle, that monitors a bridge contract on a source blockchain (e.g., Ethereum Sepolia), validates deposit events, and simulates the process of initiating a corresponding token mint transaction on a destination blockchain (e.g., Polygon Mumbai).
+This repository contains a Python-based simulation of a critical backend component for a cross-chain bridge. This script simulates an event listener (or 'oracle') that monitors a bridge contract on a source blockchain (e.g., Ethereum Sepolia), validates deposit events, and simulates initiating a corresponding token mint transaction on a destination blockchain (e.g., Polygon Mumbai).
 
 This script is designed as an architectural showcase, demonstrating a robust, multi-class structure, error handling, and separation of concerns suitable for a real-world decentralized application backend.
 
@@ -30,7 +30,7 @@ The application is designed with a clear separation of responsibilities, encapsu
 
 -   `TransactionProcessor`: If an event passes validation, this class takes over. It is responsible for constructing and (in this simulation) logging the details of the corresponding `mintTokens` transaction that would be sent to the destination chain's bridge contract.
 
--   `BridgeOrchestrator`: The central controller that ties all the other components together. It contains the main application loop, manages state (such as the last scanned block and the set of processed nonces), and orchestrates the flow of data from scanning to validation to processing. It also includes top-level error handling and resilience logic.
+-   `BridgeOrchestrator`: The central controller that integrates all the other components. It contains the main application loop, manages state (such as the last scanned block and the set of processed nonces), and orchestrates the flow of data from scanning to validation to processing. It also includes top-level error handling and resilience logic.
 
 ## How it Works
 
@@ -81,7 +81,7 @@ pip install -r requirements.txt
 
 The script reads RPC URLs from environment variables. The recommended approach is to use a `.env` file.
 
-Create a file named `.env` in the project's root directory:
+Create a file named `.env` in the project's root directory with the following content:
 ```dotenv
 # .env file
 SOURCE_CHAIN_RPC_URL='https://rpc.ankr.com/eth_sepolia'
@@ -96,14 +96,14 @@ export DESTINATION_CHAIN_RPC_URL='https://rpc.ankr.com/polygon_mumbai'
 
 _Note: While the script may have default public RPC URLs as fallbacks, using your own is highly recommended for stability and performance._
 
-### 4. Core Logic Example
+### 4. Running the Script
 
-The main script (`script.py`) initializes the `BridgeOrchestrator` and starts the event listening loop. This demonstrates how all the components are brought together.
+The main script (`script.py`) initializes the `BridgeOrchestrator` and starts the event listening loop. Here is a simplified example of how the components are brought together:
 
 ```python
 # script.py (simplified example)
 from orchestrator import BridgeOrchestrator
-from config import SOURCE_CHAIN_RPC_URL, DESTINATION_CHAIN_RPC_URL, ...
+from config import SOURCE_CHAIN_RPC_URL, DESTINATION_CHAIN_RPC_URL
 
 def main():
     """Initializes and runs the bridge orchestrator."""
@@ -127,15 +127,12 @@ if __name__ == "__main__":
     main()
 ```
 
-### 5. Running the Script
-
-Execute the main script:
-
+Execute the main script from your terminal:
 ```bash
 python script.py
 ```
 
-The application will start and begin polling for events. The output will look something like this:
+The application will start and begin polling for events. The output will look similar to this:
 
 ```
 Starting the Cross-Chain Bridge Event Listener Simulation.
